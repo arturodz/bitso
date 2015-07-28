@@ -6,7 +6,7 @@ require 'bundler/setup'
 # Require this file using `require "spec_helper"` to ensure that it is only
 # loaded once.
 
-require 'bitstamp'
+require 'bitso'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.

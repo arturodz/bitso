@@ -1,9 +1,9 @@
-module Bitso
+module Bitstamp
   class Collection
     attr_accessor :access_token, :module, :name, :model, :path
 
     def initialize(api_prefix="/api")
-      self.access_token = Bitso.key
+      self.access_token = Bitstamp.key
 
       self.module = self.class.to_s.singularize.underscore
       self.name   = self.module.split('/').last
@@ -12,19 +12,19 @@ module Bitso
     end
 
     def all(options = {})
-      Bitso::Helper.parse_objects! Bitso::Net::get(self.path).to_str, self.model
+      Bitstamp::Helper.parse_objects! Bitstamp::Net::get(self.path).to_str, self.model
     end
 
     def create(options = {})
-      Bitso::Helper.parse_object! Bitso::Net::post(self.path, options).to_str, self.model
+      Bitstamp::Helper.parse_object! Bitstamp::Net::post(self.path, options).to_str, self.model
     end
 
     def find(id, options = {})
-      Bitso::Helper.parse_object! Bitso::Net::get("#{self.path}/#{id}").to_str, self.model
+      Bitstamp::Helper.parse_object! Bitstamp::Net::get("#{self.path}/#{id}").to_str, self.model
     end
 
     def update(id, options = {})
-      Bitso::Helper.parse_object! Bitso::Net::patch("#{self.path}/#{id}", options).to_str, self.model
+      Bitstamp::Helper.parse_object! Bitstamp::Net::patch("#{self.path}/#{id}", options).to_str, self.model
     end
   end
 end

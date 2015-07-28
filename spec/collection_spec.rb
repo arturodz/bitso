@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-class Bitstamp::Coin < Bitstamp::Model;end
-class Bitstamp::Coins < Bitstamp::Collection;end
+class Bitso::Coin < Bitso::Model;end
+class Bitso::Coins < Bitso::Collection;end
 
-describe Bitstamp::Coins do
-  subject { Bitstamp::Coins.new }
+describe Bitso::Coins do
+  subject { Bitso::Coins.new }
   its(:name) { should eq 'coin' }
-  its(:module) { should eq "bitstamp/coin" }
-  its(:model) { should be Bitstamp::Coin }
+  its(:module) { should eq "bitso/coin" }
+  its(:model) { should be Bitso::Coin }
   its(:path) { should eq "/api/coins" }
 end

@@ -6,11 +6,11 @@ VCR.configure do |c|
   c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
   c.hook_into :webmock # or :fakeweb
   c.configure_rspec_metadata!
-  c.filter_sensitive_data('BITSTAMP_KEY') do |interaction|
-    ENV['BITSTAMP_KEY']
+  c.filter_sensitive_data('BITSO_KEY') do |interaction|
+    ENV['BITSO_KEY']
   end
-  c.filter_sensitive_data('BITSTAMP_SECRET') do |interaction|
-    ENV['BITSTAMP_SECRET']
+  c.filter_sensitive_data('BITSO_SECRET') do |interaction|
+    ENV['BITSO_SECRET']
   end
 end
 
