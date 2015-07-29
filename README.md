@@ -1,6 +1,6 @@
 # Bitso Ruby API
 
-Feel free to fork, modify & redistribute under the MIT license.
+Feel free to fork, modify & redistribute under the DWTFYWWI license.
 
 ## Installation
 
@@ -18,7 +18,7 @@ More info at: [https://bitso.com/api_info](https://bitso.com/api_info)
 Bitso.setup do |config|
   config.key = YOUR_API_KEY
   config.secret = YOUR_API_SECRET
-  config.client_id = YOUR_Bitso_USERNAME
+  config.client_id = YOUR_BITSO_USERNAME
 end
 ```
 

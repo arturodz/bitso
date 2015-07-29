@@ -25,6 +25,8 @@ module Bitso
         options[:key] = Bitso.key
         options[:nonce] = (Time.now.to_f*10000).to_i.to_s
         options[:signature] = HMAC::SHA256.hexdigest(Bitso.secret, options[:nonce]+Bitso.client_id.to_s+options[:key]).upcase
+        sign_string = (options[:nonce] + Bitso.client_id,)
+        options[:signature] = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), Bitso.secret, sign_string)
       end
 
       options

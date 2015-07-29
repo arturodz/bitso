@@ -14,15 +14,16 @@ end
 require 'rake'
 
 require 'jeweler'
+
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "bitstamp"
-  gem.homepage = "http://github.com/kojnapp/bitstamp"
-  gem.license = "MIT"
-  gem.summary = %Q{Bitstamp Ruby API}
-  gem.description = %Q{Ruby API for use with bitstamp.}
-  gem.email = "stygeo@gmail.com"
-  gem.authors = ["Jeffrey Wilcke"]
+  gem.name = "bitso"
+  gem.homepage = "http://github.com/arturodz/bitso"
+  gem.license = "DWTFYWWI"
+  gem.summary = %Q{Bitso Ruby API Wrapper}
+  gem.description = %Q{Ruby API for use with bitso.}
+  gem.email = "arturodz@tuta.io"
+  gem.authors = ["Arturo Diaz"]
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
