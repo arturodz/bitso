@@ -3,8 +3,6 @@ require 'active_support/core_ext'
 require 'active_support/inflector'
 require 'active_model'
 require 'rest-client'
-require 'rubysl-openssl'
-require 'rubysl-base64'
 
 require 'bitso/net'
 require 'bitso/helper'
