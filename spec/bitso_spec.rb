@@ -38,7 +38,7 @@ describe Bitso do
     context "configured" do
       subject { Bitso.balance }
       before { setup_bitso }
-      it { should == {"btc_reserved"=>"0", "fee"=>"0.4000", "btc_available"=>"0", "usd_reserved"=>"1.02", "btc_balance"=>"0", "usd_balance"=>"6953.07", "usd_available"=>"6952.05"} }
+      it { should == {"btc_reserved"=>"0", "fee"=>"0.4000", "btc_available"=>"0", "mxn_reserved"=>"1.02", "btc_balance"=>"0", "mxn_balance"=>"6953.07", "mxn_available"=>"6952.05"} }
     end
     context "not configured" do
       it { expect { Bitso.balance }.to raise_exception(Bitso::MissingConfigExeception, "Bitso Gem not properly configured") }

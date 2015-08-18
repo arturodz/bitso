@@ -19,10 +19,10 @@ Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "bitso"
   gem.homepage = "http://github.com/arturodz/bitso"
-  gem.license = "DWTFYWWI"
+  gem.license = "GPL"
   gem.summary = %Q{Bitso Ruby API Wrapper}
   gem.description = %Q{Ruby API for use with bitso.}
-  gem.email = "arturodz@tuta.io"
+  gem.email = "me@arturodz.com"
   gem.authors = ["Arturo Diaz"]
   # dependencies defined in Gemfile
 end
@@ -46,7 +46,7 @@ Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "bitstamp #{version}"
+  rdoc.title = "bitso #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
