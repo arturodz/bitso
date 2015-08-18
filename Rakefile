@@ -19,7 +19,7 @@ Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "bitso"
   gem.homepage = "http://github.com/arturodz/bitso"
-  gem.license = "GPL"
+  gem.license = "MIT"
   gem.summary = %Q{Bitso Ruby API Wrapper}
   gem.description = %Q{Ruby API for use with bitso.}
   gem.email = "me@arturodz.com"
