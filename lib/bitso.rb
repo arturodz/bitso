@@ -1,7 +1,8 @@
+require 'active_support'
 require 'active_support/core_ext'
 require 'active_support/inflector'
 require 'active_model'
-require 'rest_client'
+require 'rest-client'
 require 'openssl'
 require 'base64'
 
@@ -9,7 +10,6 @@ require 'bitso/net'
 require 'bitso/helper'
 require 'bitso/collection'
 require 'bitso/model'
-
 require 'bitso/orders'
 require 'bitso/transactions'
 require 'bitso/ticker'
@@ -28,7 +28,7 @@ module Bitso
 
   # Currency
   mattr_accessor :currency
-  @@currency = :usd
+  @@currency = :mxn
 
   def self.orders
     self.sanity_check!

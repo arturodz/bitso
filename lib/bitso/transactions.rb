@@ -22,7 +22,7 @@ module Bitso
   end
 
   class UserTransaction < Bitso::Model
-    attr_accessor :datetime, :id, :type, :usd, :btc, :fee, :order_id, :btc_usd, :nonce
+    attr_accessor :datetime, :id, :type, :mxn, :btc, :fee, :order_id, :btc_mxn, :nonce, :rate
   end
 
   # adding in methods to pull the last public trades list

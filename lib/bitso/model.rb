@@ -1,4 +1,4 @@
-module Bitstamp
+module Bitso
   class Model
     attr_accessor :error, :message
 
@@ -16,6 +16,7 @@ module Bitstamp
         begin
           send("#{name}=", value)
         rescue NoMethodError => e
+          puts "#{e.backtrace.join("\n\t")}"
           puts "Unable to assign #{name}. No such method."
         end
       end

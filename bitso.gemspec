@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.authors = ["Arturo Diaz"]
   s.date = "2014-03-09"
   s.description = "Ruby API for use with bitso."
-  s.email = "arturodz@tuta.io"
+  s.email = "me@arturodz.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.md"

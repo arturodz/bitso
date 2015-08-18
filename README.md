@@ -1,6 +1,6 @@
 # Bitso Ruby API
 
-Feel free to fork, modify & redistribute under the DWTFYWWI license.
+Feel free to fork, modify & redistribute under the GPL license.
 
 ## Installation
 

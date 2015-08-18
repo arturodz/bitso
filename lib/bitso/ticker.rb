@@ -1,9 +1,9 @@
-module Bitstamp
-  class Ticker < Bitstamp::Model
+module Bitso
+  class Ticker < Bitso::Model
     attr_accessor :last, :high, :low, :volume, :bid, :ask, :timestamp, :vwap
 
     def self.from_api
-      Bitstamp::Helper.parse_object!(Bitstamp::Net.get('/ticker').to_str, self)
+      Bitso::Helper.parse_object!(Bitso::Net.get('/ticker').to_str, self)
     end
 
     def self.method_missing method, *args

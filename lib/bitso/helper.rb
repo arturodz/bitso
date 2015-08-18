@@ -1,7 +1,7 @@
-module Bitstamp
+module Bitso
   module Helper
     def self.parse_objects!(string, klass)
-      # If Bitstamp returned nothing (which it does if the results yield empty) 'cast' it to an array
+      # If Bitso returned nothing (which it does if the results yield empty) 'cast' it to an array
       string = "[]" if string == ""
 
       objects = JSON.parse(string)

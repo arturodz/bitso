@@ -1,21 +1,21 @@
-module Bitstamp
-  class Orders < Bitstamp::Collection
+module Bitso
+  class Orders < Bitso::Collection
     def all(options = {})
-      Bitstamp::Helper.parse_objects! Bitstamp::Net::post('/open_orders').to_str, self.model
+      Bitso::Helper.parse_objects! Bitso::Net::post('/open_orders').to_str, self.model
     end
 
     def create(options = {})
-      path = (options[:type] == Bitstamp::Order::SELL ? "/sell" : "/buy")
-      Bitstamp::Helper.parse_object! Bitstamp::Net::post(path, options).to_str, self.model
+      path = (options[:type] == Bitso::Order::SELL ? "/sell" : "/buy")
+      Bitso::Helper.parse_object! Bitso::Net::post(path, options).to_str, self.model
     end
 
     def sell(options = {})
-      options.merge!({type: Bitstamp::Order::SELL})
+      options.merge!({type: Bitso::Order::SELL})
       self.create options
     end
 
     def buy(options = {})
-      options.merge!({type: Bitstamp::Order::BUY})
+      options.merge!({type: Bitso::Order::BUY})
       self.create options
     end
 
@@ -27,7 +27,7 @@ module Bitstamp
     end
   end
 
-  class Order < Bitstamp::Model
+  class Order < Bitso::Model
     BUY  = 0
     SELL = 1
 
@@ -35,7 +35,7 @@ module Bitstamp
     attr_accessor :error, :message
 
     def cancel!
-      Bitstamp::Net::post('/cancel_order', {id: self.id}).to_str
+      Bitso::Net::post('/cancel_order', {id: self.id}).to_str
     end
   end
 end
