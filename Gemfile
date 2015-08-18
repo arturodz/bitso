@@ -6,7 +6,7 @@ source "http://rubygems.org"
 #   gem "activesupport", ">= 2.3.5"
 gem "activemodel" , ">= 4.2.3"
 gem "activesupport", ">= 4.2.3"
-gem "rest-client", "1.8.0"
+gem "rest-client", "~> 1.8.0"
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.

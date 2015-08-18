@@ -24,7 +24,7 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{Ruby API for use with bitso.}
   gem.email = "me@arturodz.com"
   gem.authors = ["Arturo Diaz"]
-  # dependencies defined in Gemfile
+
 end
 Jeweler::RubygemsDotOrgTasks.new
 
