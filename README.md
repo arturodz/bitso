@@ -1,6 +1,5 @@
 # Bitso Ruby API
 
-Feel free to fork, modify & redistribute under the GPL license.
 
 ## Installation
 
@@ -92,3 +91,8 @@ my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+
+## Credits
+
+This is a fork of the [Bitstamp gem](https://github.com/kojnapp/bitstamp) built by [kojnapp](https://github.com/kojnapp).
