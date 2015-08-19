@@ -19,6 +19,11 @@ More info at: [https://bitso.com/api_info](https://bitso.com/api_info)
 agent = Bitso.new(CLIENT, KEY, SECRET)
 ```
 
+## Usage
+
+```
+
+
 ## Contributing
 
 1. Fork it

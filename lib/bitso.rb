@@ -12,20 +12,15 @@ class Bitso
 
 	def payload(options = {})
 		nonce = (Time.now.to_f*10000).to_i.to_s
-		sign_string = (nonce + @client + @key)
-		signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), @secret, sign_string)
+		signature = OpenSSL::HMAC.hexdigest(
+      OpenSSL::Digest.new('sha256'), @secret, (nonce + @client + @key))
 		payload = {
 			key: @key,
 			nonce: nonce,
 			signature: signature.upcase
 		}
 
-		if options
-			options.each do |k,v|
-				payload[k] = v
-			end
-		end
-
+    options.each { |k,v| payload[k] = v } if options
     payload
 	end
 
@@ -41,9 +36,13 @@ class Bitso
 		response = JSON.parse(response.body, quirks_mode: true)
 
     if response.class == Hash
-      response = symbolize_keys response
+      result = symbolize_keys response
+      Struct.new(* result.keys).new(* result.values)
     elsif response.class == Array
-      response = response.map { |r| symbolize_keys r }
+      response = response.map do |r|
+        result = symbolize_keys r
+        Struct.new(* result.keys).new(* result.values)
+      end
     else
       response
     end
@@ -52,13 +51,11 @@ class Bitso
   def symbolize_keys(hash)
     hash.inject({}){|result, (key, value)|
       new_key = case key
-      when String then key.to_sym
-      else key
+      when String then key.to_sym else key
       end
 
       new_value = case value
-      when Hash then symbolize_keys(value)
-      else value
+      when Hash then symbolize_keys(value) else value
       end
 
       result[new_key] = new_value
@@ -68,57 +65,23 @@ class Bitso
 
 	# Public Functions
 
-	def ticker(options={})
-		response = JSON.parse(Typhoeus.get("https://api.bitso.com/v2/ticker?book=btc_mxn").body)
-	end
+  public_functions = ["ticker", "orders", "transactions"]
 
-	def orders(options={})
-		request :get, "order_book", options
-	end
-
-	def transactions(options={})
-		request :get, "transactions", options
-	end
-
-	# Private Functions
-
-	def balance(options={})
-		request :post, "balance", options
-	end
-
-	def user_transactions(options={})
-		request :post, "user_transactions", options
-	end
-
-	def open_orders(options={})
-		request :post, "open_orders", options
-	end
-
-	def lookup_order(options={})
-		request :post, "lookup_order", options
-	end
-
-	def cancel_order(options={})
-		request :post, "cancel_order", options
-	end
-
-	def buy(options={})
-		request :post, "buy", options
-	end
-
-	def sell(options={})
-		request :post, "sell", options
-	end
-
-  def bitcoin_deposit_address(options={})
-    request :post, "bitcoin_deposit_address", options
+  public_functions.each do |action|
+	  define_method(action) do |options={}|
+      result = request :get, action, options
+  	end
   end
 
-  def bitcoin_withdrawal(options={})
-    request :post, "bitcoin_withdrawal", options
-  end
+  # Private Functions
 
-  def ripple_withdrawal(options={})
-    request :post, "ripple_withdrawal", options
+  private_functions = ["balance", "user_transactions", "open_orders",
+    "lookup_order", "cancel_order", "buy", "sell", "bitcoin_deposit_address",
+    "bitcoin_withdrawal", "ripple_withdrawal"]
+
+  private_functions.each do |action|
+  	define_method(action) do |options={}|
+      result = request :post, action, options
+  	end
   end
 end
