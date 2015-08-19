@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.authors = ["Arturo Diaz"]
   s.date = "2015-08-19"
-  s.description = "TODO: API wrapper for Bitso, a Mexican Bitcoin Exchange"
+  s.description = "API wrapper for Bitso, a Mexican Bitcoin Exchange"
   s.email = "me@arturodz.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",
@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
     "VERSION",
     "bitso.gemspec",
     "lib/bitso.rb",
+    "lib/bitso/helper.rb",
     "spec/bitso_spec.rb",
     "spec/collection_spec.rb",
     "spec/fixtures/vcr_cassettes/bitso/balance.yml",
@@ -52,7 +53,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/arturodz/bitso"
   s.licenses = ["MIT"]
   s.rubygems_version = "2.4.8"
-  s.summary = "TODO: API wrapper for Bitso"
+  s.summary = "API wrapper for Bitso"
 
   if s.respond_to? :specification_version then
     s.specification_version = 4
