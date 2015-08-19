@@ -1,22 +1,34 @@
-# Bitso Ruby API
+# Bitso Ruby GEM
 
+This is the official client library for the [Bitso API v2](https://bitso.com/api_info). We provide an intuitive, stable interface to integrate Bitso into your Ruby project.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
+    gem 'bitso'
+
+Then execute:
+
+    bundle install
+
+Or install it yourself as:
+
+    gem install bitso
+
+
+
+## Authentication
+
+### Create API Key
+
+More info at: [https://bitso.com/api_setup](https://bitso.com/api_setup)
+
+### Setup
+
 ```ruby
-gem 'bitso'
-```
-
-## Create API Key
-
-More info at: [https://bitso.com/api_info](https://bitso.com/api_info)
-
-## Setup
-
-```ruby
-agent = Bitso.new(CLIENT, KEY, SECRET)
+require 'bitso'
+client = Bitso.new(CLIENT, API_KEY, API_SECRET)
 ```
 
 ## Usage
