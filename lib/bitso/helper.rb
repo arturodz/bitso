@@ -23,11 +23,11 @@ module Helper
 
   def structure_response(response, precision)
     if response.class == Hash
-      result = precise(symbolize_keys response, precision)
+      result = precise(symbolize_keys(response), precision)
       Struct.new(* result.keys).new(* result.values)
     elsif response.class == Array
       response = response.map do |r|
-        result = precise(symbolize_keys r, precision)
+        result = precise(symbolize_keys(r), precision)
         Struct.new(* result.keys).new(* result.values)
       end
     else

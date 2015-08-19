@@ -12,7 +12,7 @@ class Bitso
 		@client = client
 		@key = key
 		@secret = secret
-    @decimal = false unless options[:decimal] == true
+    @decimal = options[:decimal]
 		@base_url = 'https://api.bitso.com/v2/'
 	end
 
