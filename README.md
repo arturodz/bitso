@@ -31,9 +31,15 @@ require 'bitso'
 client = Bitso.new(CLIENT, API_KEY, API_SECRET)
 ```
 
-## Usage
+If you want decimal precision you can pass the `decimal: true` parameter to the Bitso client.
 
 ```
+client = Bitso.new(CLIENT, API_KEY, API_SECRET, decimal: true)
+```
+
+## Usage
+
+### Current Trading Information
 
 
 ## Contributing
