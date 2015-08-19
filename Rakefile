@@ -2,7 +2,6 @@
 
 require 'rubygems'
 require 'bundler'
-require "bundler/gem_tasks"
 
 begin
   Bundler.setup(:default, :development)
@@ -14,32 +13,33 @@ end
 require 'rake'
 
 require 'jeweler'
-
 Jeweler::Tasks.new do |gem|
-  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
+  # gem is a Gem::Specification... see http://guides.rubygems.org/specification-reference/ for more options
   gem.name = "bitso"
   gem.homepage = "http://github.com/arturodz/bitso"
   gem.license = "MIT"
-  gem.summary = %Q{Bitso Ruby API Wrapper}
-  gem.description = %Q{Ruby API for use with bitso.}
+  gem.summary = %Q{API wrapper for Bitso}
+  gem.description = %Q{API wrapper for Bitso, a Mexican Bitcoin Exchange}
   gem.email = "me@arturodz.com"
   gem.authors = ["Arturo Diaz"]
-
+  # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
 
-require 'rspec/core'
-require 'rspec/core/rake_task'
-RSpec::Core::RakeTask.new(:spec) do |spec|
-  spec.pattern = FileList['spec/**/*_spec.rb']
+require 'rake/testtask'
+Rake::TestTask.new(:test) do |test|
+  test.libs << 'lib' << 'test'
+  test.pattern = 'test/**/test_*.rb'
+  test.verbose = true
 end
 
-RSpec::Core::RakeTask.new(:rcov) do |spec|
-  spec.pattern = 'spec/**/*_spec.rb'
-  spec.rcov = true
+desc "Code coverage detail"
+task :simplecov do
+  ENV['COVERAGE'] = "true"
+  Rake::Task['test'].execute
 end
 
-task :default => :spec
+task :default => :test
 
 require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|

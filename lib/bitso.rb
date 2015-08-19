@@ -1,96 +1,124 @@
-require 'active_support'
-require 'active_support/core_ext'
-require 'active_support/inflector'
-require 'active_model'
-require 'rest-client'
+require 'typhoeus'
+require 'openssl'
+require 'base64'
 
-require 'bitso/net'
-require 'bitso/helper'
-require 'bitso/collection'
-require 'bitso/model'
-require 'bitso/balance'
-require 'bitso/orders'
-require 'bitso/transactions'
-require 'bitso/ticker'
+class Bitso
+	def initialize(client, key, secret)
+		@client = client
+		@key = key
+		@secret = secret
+		@base_url = 'https://api.bitso.com/v2/'
+	end
 
-String.send(:include, ActiveSupport::Inflector)
+	def payload(options = {})
+		nonce = (Time.now.to_f*10000).to_i.to_s
+		sign_string = (nonce + @client + @key)
+		signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), @secret, sign_string)
+		payload = {
+			key: @key,
+			nonce: nonce,
+			signature: signature.upcase
+		}
 
-module Bitso
-  # API Key
-  mattr_accessor :key
+		if options
+			options.each do |k,v|
+				payload[k] = v
+			end
+		end
 
-  # Bitso secret
-  mattr_accessor :secret
+    payload
+	end
 
-  # Bitso client ID
-  mattr_accessor :client_id
+	def request(method, action, options)
+		request = Typhoeus::Request.new(
+      "#{@base_url}#{action}",
+		  method: method,
+			body: payload(options).to_json,
+			headers: { "Content-Type" => "application/json" }
+    )
 
-  # Currency
-  mattr_accessor :currency
-  @@currency = :mxn
+		response = request.run
+		response = JSON.parse(response.body, quirks_mode: true)
 
-  def self.orders
-    self.sanity_check!
-
-    @@orders ||= Bitso::Orders.new
-  end
-
-  def self.user_transactions
-    self.sanity_check!
-
-    @@transactions ||= Bitso::UserTransactions.new
-  end
-
-  def self.transactions
-    return Bitso::Transactions.from_api
-  end
-
-  def self.balance
-    self.sanity_check!
-    return Bitso::Balance.from_api
-  end
-
-  def self.withdraw_bitcoins(options = {})
-    self.sanity_check!
-    if options[:amount].nil? || options[:address].nil?
-      raise MissingConfigExeception.new("Required parameters not supplied, :amount, :address")
-    end
-    response_body = Bitso::Net.post('/bitcoin_withdrawal',options)
-    if response_body != '"ok"'
-      $stderr.puts "Withdraw Bitcoins Error: " + response_body
-      return false
-    end
-    return true
-  end
-
-  def self.bitcoin_deposit_address
-    # returns the deposit address
-    self.sanity_check!
-    address = Bitso::Net.post('/bitcoin_deposit_address')
-    return address[1..address.length-2]
-  end
-
-  def self.ticker
-    return Bitso::Ticker.from_api
-  end
-
-  def self.order_book
-    return JSON.parse Bitso::Net.get('/order_book').to_str
-  end
-
-  def self.setup
-    yield self
-  end
-
-  def self.configured?
-    self.key && self.secret && self.client_id
-  end
-
-  def self.sanity_check!
-    unless configured?
-      raise MissingConfigExeception.new("Bitso Gem not properly configured")
+    if response.class == Hash
+      response = symbolize_keys response
+    elsif response.class == Array
+      response = response.map { |r| symbolize_keys r }
+    else
+      response
     end
   end
 
-  class MissingConfigExeception<Exception;end;
+  def symbolize_keys(hash)
+    hash.inject({}){|result, (key, value)|
+      new_key = case key
+      when String then key.to_sym
+      else key
+      end
+
+      new_value = case value
+      when Hash then symbolize_keys(value)
+      else value
+      end
+
+      result[new_key] = new_value
+      result
+    }
+  end
+
+	# Public Functions
+
+	def ticker(options={})
+		response = JSON.parse(Typhoeus.get("https://api.bitso.com/v2/ticker?book=btc_mxn").body)
+	end
+
+	def orders(options={})
+		request :get, "order_book", options
+	end
+
+	def transactions(options={})
+		request :get, "transactions", options
+	end
+
+	# Private Functions
+
+	def balance(options={})
+		request :post, "balance", options
+	end
+
+	def user_transactions(options={})
+		request :post, "user_transactions", options
+	end
+
+	def open_orders(options={})
+		request :post, "open_orders", options
+	end
+
+	def lookup_order(options={})
+		request :post, "lookup_order", options
+	end
+
+	def cancel_order(options={})
+		request :post, "cancel_order", options
+	end
+
+	def buy(options={})
+		request :post, "buy", options
+	end
+
+	def sell(options={})
+		request :post, "sell", options
+	end
+
+  def bitcoin_deposit_address(options={})
+    request :post, "bitcoin_deposit_address", options
+  end
+
+  def bitcoin_withdrawal(options={})
+    request :post, "bitcoin_withdrawal", options
+  end
+
+  def ripple_withdrawal(options={})
+    request :post, "ripple_withdrawal", options
+  end
 end
