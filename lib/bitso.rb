@@ -14,61 +14,25 @@ class Bitso
 		nonce = (Time.now.to_f*10000).to_i.to_s
 		signature = OpenSSL::HMAC.hexdigest(
       OpenSSL::Digest.new('sha256'), @secret, (nonce + @client + @key))
+
 		payload = {
 			key: @key,
 			nonce: nonce,
 			signature: signature.upcase
 		}
 
-    options.each { |k,v| payload[k] = v } if options
-    payload
+    options.each { |k,v| payload[k] = v }; payload if options
 	end
 
 	def request(method, action, options)
-		request = Typhoeus::Request.new(
+		response = Typhoeus::Request.new(
       "#{@base_url}#{action}",
 		  method: method,
 			body: payload(options).to_json,
 			headers: { "Content-Type" => "application/json" }
-    )
+    ).run
 
-		response = request.run
-		response = JSON.parse(response.body, quirks_mode: true)
-
-    if response.class == Hash
-      result = floatify(symbolize_keys response)
-      Struct.new(* result.keys).new(* result.values)
-    elsif response.class == Array
-      response = response.map do |r|
-        result = floatify(symbolize_keys r)
-        Struct.new(* result.keys).new(* result.values)
-      end
-    else
-      response
-    end
-  end
-
-  def floatify hash
-    num_data = ["rate", "mxn", "btc", "fee", "mxn_balance", "btc_balance",
-      "mxn_reserved", "btc_reserved", "mxn_available", "btc_available",
-      "amount", "price"]
-
-    hash.each { |k, v| hash[k] = v.to_f if num_data.include? k.id2name }
-  end
-
-  def symbolize_keys(hash)
-    hash.inject({}){|result, (key, value)|
-      new_key = case key
-      when String then key.to_sym else key
-      end
-
-      new_value = case value
-      when Hash then symbolize_keys(value) else value
-      end
-
-      result[new_key] = new_value
-      result
-    }
+		structure_response(JSON.parse(response.body, quirks_mode: true))
   end
 
 	# Public Functions
@@ -77,7 +41,7 @@ class Bitso
 
   public_functions.each do |action|
 	  define_method(action) do |options={}|
-      result = request :get, action, options
+      request :get, action, options
   	end
   end
 
@@ -89,7 +53,41 @@ class Bitso
 
   private_functions.each do |action|
   	define_method(action) do |options={}|
-      result = request :post, action, options
+      request :post, action, options
   	end
+  end
+
+  # Helpers
+
+  def floatify(hash)
+    num_data = ["rate", "mxn", "btc", "fee", "mxn_balance", "btc_balance",
+      "mxn_reserved", "btc_reserved", "mxn_available", "btc_available",
+      "amount", "price"]
+
+    hash.each { |k, v| hash[k] = v.to_f if num_data.include? k.id2name }
+  end
+
+  def symbolize_keys(hash)
+    hash.inject({}) { |result, (key, value)|
+      new_key = case key when String then key.to_sym else key end
+      new_value = case value when Hash then symbolize_keys(value) else value end
+
+      result[new_key] = new_value
+      result
+    }
+  end
+
+  def structure_response(response)
+    if response.class == Hash
+      result = floatify(symbolize_keys response)
+      Struct.new(* result.keys).new(* result.values)
+    elsif response.class == Array
+      response = response.map do |r|
+        result = floatify(symbolize_keys r)
+        Struct.new(* result.keys).new(* result.values)
+      end
+    else
+      response
+    end
   end
 end
