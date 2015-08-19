@@ -12,7 +12,7 @@ class Bitso
     @client = client
     @key = key
     @secret = secret
-    @decimal = options[:decimal]
+    @precise = options[:precise]
     @base_url = 'https://api.bitso.com/v2/'
   end
 
@@ -42,7 +42,7 @@ class Bitso
       headers: { "Content-Type" => "application/json" }
     ).run
 
-    structure_response(JSON.parse(response.body, quirks_mode: true), @decimal)
+    structure_response(JSON.parse(response.body, quirks_mode: true), @precise)
   end
 
   # Public Functions

@@ -1,12 +1,12 @@
 module Helper
-  def precise(hash, decimal)
+  def re_hash(hash, precise)
     num_data = ["rate", "mxn", "btc", "fee", "mxn_balance", "btc_balance",
       "mxn_reserved", "btc_reserved", "mxn_available", "btc_available",
       "amount", "price", "bid", "ask", "last", "high", "low", "vwap", "volume"]
 
     hash.each do |k,v|
       if num_data.include? k.id2name
-        hash[k] = decimal ? BigDecimal.new(v) : v.to_f
+        hash[k] = precise ? BigDecimal.new(v) : v.to_f
       end
     end
   end
@@ -21,13 +21,13 @@ module Helper
     }
   end
 
-  def structure_response(response, precision)
+  def structure_response(response, precise)
     if response.class == Hash
-      result = precise(symbolize_keys(response), precision)
+      result = re_hash(symbolize_keys(response), precise)
       Struct.new(* result.keys).new(* result.values)
     elsif response.class == Array
       response = response.map do |r|
-        result = precise(symbolize_keys(r), precision)
+        result = re_hash(symbolize_keys(r), precise)
         Struct.new(* result.keys).new(* result.values)
       end
     else
