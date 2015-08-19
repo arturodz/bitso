@@ -71,6 +71,22 @@ Returns an `Array` of `UserTransaction`.
 Bitso.user_transactions.all
 ```
 
+## Get your Bitcoin deposit address
+
+Returns a `String` with your BTC deposit address
+
+```ruby
+Bitso.bitcoin_deposit_address
+```
+
+## Withdraw Bitcoins
+
+Returns a `Boolean` indicating whether the withdrawal was successful or not
+
+```ruby
+Bitso.withdraw_bitcoins(amount: 1.23456789, address: "16Gcsethp9NdCt7oQaBaFS37hWX6nWafJL")
+```
+
 *To be continued!**
 
 # Tests
