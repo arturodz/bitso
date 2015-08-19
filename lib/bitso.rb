@@ -55,11 +55,12 @@ module Bitso
     if options[:amount].nil? || options[:address].nil?
       raise MissingConfigExeception.new("Required parameters not supplied, :amount, :address")
     end
-    response_body = Bitso::Net.post('/bitcoin_withdrawal',options).body_str
-    if response_body != 'true'
-      return JSON.parse response_body
+    response_body = Bitso::Net.post('/bitcoin_withdrawal',options)
+    if response_body != '"ok"'
+      $stderr.puts "Withdraw Bitcoins Error: " + response_body
+      return false
     else
-      return response_body
+      return true
     end
   end
 
