@@ -1,10 +1,14 @@
 module Helper
-  def floatify(hash)
+  def precise(hash, decimal)
     num_data = ["rate", "mxn", "btc", "fee", "mxn_balance", "btc_balance",
       "mxn_reserved", "btc_reserved", "mxn_available", "btc_available",
       "amount", "price", "bid", "ask", "last", "high", "low", "vwap", "volume"]
 
-    hash.each { |k, v| hash[k] = v.to_f if num_data.include? k.id2name }
+    if decimal
+      hash.each { |k, v| hash[k] = BigDecimal.new(v) if num_data.include? k.id2name }
+    else
+      hash.each { |k, v| hash[k] = v.to_f if num_data.include? k.id2name }
+    end
   end
 
   def symbolize_keys(hash)
@@ -17,13 +21,13 @@ module Helper
     }
   end
 
-  def structure_response(response)
+  def structure_response(response, precision)
     if response.class == Hash
-      result = floatify(symbolize_keys response)
+      result = precise(symbolize_keys response, precision)
       Struct.new(* result.keys).new(* result.values)
     elsif response.class == Array
       response = response.map do |r|
-        result = floatify(symbolize_keys r)
+        result = precise(symbolize_keys r, precision)
         Struct.new(* result.keys).new(* result.values)
       end
     else

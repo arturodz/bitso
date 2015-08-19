@@ -3,14 +3,16 @@ require 'bitso/helper'
 require 'typhoeus'
 require 'openssl'
 require 'base64'
+require 'bigdecimal'
 
 class Bitso
   include Helper
 
-	def initialize(client, key, secret)
+	def initialize(client, key, secret, options={})
 		@client = client
 		@key = key
 		@secret = secret
+    @decimal = false unless options[:decimal] == true
 		@base_url = 'https://api.bitso.com/v2/'
 	end
 
@@ -36,7 +38,7 @@ class Bitso
 			headers: { "Content-Type" => "application/json" }
     ).run
 
-		structure_response(JSON.parse(response.body, quirks_mode: true))
+		structure_response(JSON.parse(response.body, quirks_mode: true), @decimal)
   end
 
 	# Public Functions
