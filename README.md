@@ -71,6 +71,14 @@ Returns an `Array` of `UserTransaction`.
 Bitso.user_transactions.all
 ```
 
+## Get your Bitcoin deposit address
+
+Returns a `String` with your BTC deposit address
+
+```ruby
+Bitso.bitcoin_deposit_address
+```
+
 *To be continued!**
 
 # Tests
