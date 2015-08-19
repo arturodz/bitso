@@ -59,9 +59,8 @@ module Bitso
     if response_body != '"ok"'
       $stderr.puts "Withdraw Bitcoins Error: " + response_body
       return false
-    else
-      return true
     end
+    return true
   end
 
   def self.bitcoin_deposit_address
