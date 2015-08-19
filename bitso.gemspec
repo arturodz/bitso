@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
     "VERSION",
     "bitso.gemspec",
     "lib/bitso.rb",
+    "lib/bitso/balance.rb",
     "lib/bitso/collection.rb",
     "lib/bitso/helper.rb",
     "lib/bitso/model.rb",

@@ -39,6 +39,21 @@ each individual method.
 Bitso::Ticker.low     # => "109.00"
 ```
 
+## Bitso Balance
+
+The Bitso balance. Returns `btc_available`, `btc_reserved`, `btc_balance`, `mxn_available`, `mxn_reserved`, `mxn_balance`, `fee`
+
+```ruby
+Bitso.balance
+```
+
+It's also possible to query through the `Bitso::Balance` object with
+each individual method.
+
+```ruby
+Bitso::Balance.fee     # => "1.0000"
+```
+
 ## Fetch your open order
 
 Returns an array with your open orders.
