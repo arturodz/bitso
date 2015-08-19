@@ -31,7 +31,7 @@ module Bitso
     BUY  = 0
     SELL = 1
 
-    attr_accessor :type, :amount, :price, :id, :datetime
+    attr_accessor :type, :amount, :price, :id, :datetime, :book, :status
     attr_accessor :error, :message
 
     def cancel!
