@@ -28,7 +28,7 @@ class Bitso
     }
 
     if options
-      options.each { |k,v| payload[k] = v.class == Float ? v.to_s : v.to_digits }
+      options.each { |k,v| payload[k] = v.class == Float ? v.to_s : v.to_s("F") }
     end
 
     payload
