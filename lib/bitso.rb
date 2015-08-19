@@ -36,16 +36,24 @@ class Bitso
 		response = JSON.parse(response.body, quirks_mode: true)
 
     if response.class == Hash
-      result = symbolize_keys response
+      result = floatify(symbolize_keys response)
       Struct.new(* result.keys).new(* result.values)
     elsif response.class == Array
       response = response.map do |r|
-        result = symbolize_keys r
+        result = floatify(symbolize_keys r)
         Struct.new(* result.keys).new(* result.values)
       end
     else
       response
     end
+  end
+
+  def floatify hash
+    num_data = ["rate", "mxn", "btc", "fee", "mxn_balance", "btc_balance",
+      "mxn_reserved", "btc_reserved", "mxn_available", "btc_available",
+      "amount", "price"]
+
+    hash.each { |k, v| hash[k] = v.to_f if num_data.include? k.id2name }
   end
 
   def symbolize_keys(hash)
