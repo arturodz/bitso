@@ -79,6 +79,14 @@ Returns a `String` with your BTC deposit address
 Bitso.bitcoin_deposit_address
 ```
 
+## Withdraw Bitcoins
+
+Returns a `Boolean` indicating whether the withdrawal was successful or not
+
+```ruby
+Bitso.withdraw_bitcoins(amount: 1.23456789, address: "16Gcsethp9NdCt7oQaBaFS37hWX6nWafJL")
+```
+
 *To be continued!**
 
 # Tests
