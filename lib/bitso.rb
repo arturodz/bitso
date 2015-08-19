@@ -47,7 +47,7 @@ class Bitso
 
   # Public Functions
 
-  public_functions = ["ticker", "orders", "transactions"]
+  public_functions = ["ticker", "order_book", "transactions"]
 
   public_functions.each do |action|
     define_method(action) do |options={}|
