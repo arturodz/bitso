@@ -8,6 +8,7 @@ require 'bitso/net'
 require 'bitso/helper'
 require 'bitso/collection'
 require 'bitso/model'
+require 'bitso/balance'
 require 'bitso/orders'
 require 'bitso/transactions'
 require 'bitso/ticker'
@@ -46,8 +47,7 @@ module Bitso
 
   def self.balance
     self.sanity_check!
-
-    JSON.parse Bitso::Net.post('/balance').to_str
+    return Bitso::Balance.from_api
   end
 
   def self.withdraw_bitcoins(options = {})
@@ -68,11 +68,6 @@ module Bitso
     self.sanity_check!
     address = Bitso::Net.post('/bitcoin_deposit_address')
     return address[1..address.length-2]
-  end
-
-  def self.unconfirmed_user_deposits
-    self.sanity_check!
-    return JSON.parse Bitso::Net::post("/unconfirmed_btc").body_str
   end
 
   def self.ticker
