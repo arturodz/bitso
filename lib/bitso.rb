@@ -8,6 +8,7 @@ require 'bitso/net'
 require 'bitso/helper'
 require 'bitso/collection'
 require 'bitso/model'
+require 'bitso/balance'
 require 'bitso/orders'
 require 'bitso/transactions'
 require 'bitso/ticker'
@@ -46,8 +47,7 @@ module Bitso
 
   def self.balance
     self.sanity_check!
-
-    JSON.parse Bitso::Net.post('/balance').to_str
+    return Bitso::Balance.from_api
   end
 
   def self.withdraw_bitcoins(options = {})
