@@ -41,7 +41,18 @@ client = Bitso.new(CLIENT, API_KEY, API_SECRET, precision: true)
 ## Usage
 =======
 
-### Current Trading Information
+### Ticker
+
+The Bitso ticker. Returns `last`, `high`, `low`, `volume`, `bid` and `ask`
+
+```ruby
+client.ticker
+```
+
+```ruby
+client.ticker.low     # => "3500.17"
+```
+
 
 
 ## Contributing
