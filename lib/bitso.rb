@@ -62,10 +62,12 @@ module Bitso
       return response_body
     end
   end
+
   def self.bitcoin_deposit_address
     # returns the deposit address
     self.sanity_check!
-    return Bitso::Net.post('/bitcoin_deposit_address').body_str
+    address = Bitso::Net.post('/bitcoin_deposit_address')
+    return address[1..address.length-2]
   end
 
   def self.unconfirmed_user_deposits
