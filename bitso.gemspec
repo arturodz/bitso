@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
     "README.md"
   ]
   s.files = [
-    ".DS_Store",
     ".rspec",
     ".ruby-gemset",
     ".ruby-version",
