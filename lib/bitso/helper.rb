@@ -4,10 +4,10 @@ module Helper
       "mxn_reserved", "btc_reserved", "mxn_available", "btc_available",
       "amount", "price", "bid", "ask", "last", "high", "low", "vwap", "volume"]
 
-    if decimal
-      hash.each { |k, v| hash[k] = BigDecimal.new(v) if num_data.include? k.id2name }
-    else
-      hash.each { |k, v| hash[k] = v.to_f if num_data.include? k.id2name }
+    hash.each do |k,v|
+      if num_data.include? k.id2name
+        hash[k] = decimal ? BigDecimal.new(v) : v.to_f
+      end
     end
   end
 
