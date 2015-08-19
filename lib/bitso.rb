@@ -70,11 +70,6 @@ module Bitso
     return address[1..address.length-2]
   end
 
-  def self.unconfirmed_user_deposits
-    self.sanity_check!
-    return JSON.parse Bitso::Net::post("/unconfirmed_btc").body_str
-  end
-
   def self.ticker
     return Bitso::Ticker.from_api
   end
