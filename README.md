@@ -31,7 +31,9 @@ require 'bitso'
 client = Bitso.new(CLIENT, API_KEY, API_SECRET)
 ```
 
-Our API returns [Floats](http://ruby-doc.org/core-2.2.0/Float.html) by default. However, we recommend you override this option and use [BigDecimals](http://ruby-doc.org/stdlib-1.9.3/libdoc/bigdecimal/rdoc/BigDecimal.html) instead to avoid loss of precision. In order to do this, please initialize your client this way:
+## Usage
+=======
+Our API returns [Floats](http://ruby-doc.org/core-2.2.0/Float.html) by default. However, we recommend you override this option and use [BigDecimals](http://ruby-doc.org/stdlib-1.9.3/libdoc/bigdecimal/rdoc/BigDecimal.html) instead to avoid loss of precision. In order to do this, you can pass the `decimal: true` parameter to the Bitso client:
 
 ```ruby
 require 'bitso'
@@ -40,9 +42,7 @@ client = Bitso.new(CLIENT, API_KEY, API_SECRET, precision: true)
 
 ## Usage
 
-```ruby
-require asdf
-```
+### Current Trading Information
 
 
 ## Contributing
