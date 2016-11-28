@@ -1,5 +1,6 @@
-# Bitso Ruby API
+# Bitso Ruby GEM
 
+This is the official client library for the [Bitso API v2](https://bitso.com/api_info). We provide an intuitive, stable interface to integrate Bitso into your Ruby project.
 
 ## Installation
 
@@ -7,112 +8,52 @@ Add this line to your application's Gemfile:
 
     gem 'bitso'
 
-## Create API Key
+Then execute:
 
-More info at: [https://bitso.com/api_info](https://bitso.com/api_info)
+    bundle install
 
-## Setup
+Or install it yourself as:
+
+    gem install bitso
+
+
+
+## Authentication
+
+### Create API Key
+
+More info at: [https://bitso.com/api_setup](https://bitso.com/api_setup)
+
+### Setup
 
 ```ruby
-Bitso.setup do |config|
-  config.key = YOUR_API_KEY
-  config.secret = YOUR_API_SECRET
-  config.client_id = YOUR_BITSO_USERNAME
-end
+require 'bitso'
+client = Bitso.new(CLIENT, API_KEY, API_SECRET)
 ```
 
-If you fail to set your `key` or `secret` or `client_id` a `MissingConfigExeception`
-will be raised.
+Our API returns [Floats](http://ruby-doc.org/core-2.2.0/Float.html) by default. However, we recommend you override this option and use [BigDecimals](http://ruby-doc.org/stdlib-1.9.3/libdoc/bigdecimal/rdoc/BigDecimal.html) instead to avoid loss of precision. In order to do this, you can pass the `precise: true` parameter to the Bitso client:
 
-## Bitso ticker
+```ruby
+require 'bitso'
+client = Bitso.new(CLIENT, API_KEY, API_SECRET, precise: true)
+```
+
+## Usage
+=======
+
+### Ticker
 
 The Bitso ticker. Returns `last`, `high`, `low`, `volume`, `bid` and `ask`
 
 ```ruby
-Bitso.ticker
+client.ticker
 ```
-
-It's also possible to query through the `Bitso::Ticker` object with
-each individual method.
 
 ```ruby
-Bitso::Ticker.low     # => "109.00"
+client.ticker.low     # => "3500.17"
 ```
 
-## Bitso Balance
 
-The Bitso balance. Returns `btc_available`, `btc_reserved`, `btc_balance`, `mxn_available`, `mxn_reserved`, `mxn_balance`, `fee`
-
-```ruby
-Bitso.balance
-```
-
-It's also possible to query through the `Bitso::Balance` object with
-each individual method.
-
-```ruby
-Bitso::Balance.fee     # => "1.0000"
-```
-
-## Fetch your open order
-
-Returns an array with your open orders.
-
-```ruby
-Bitso.orders.all
-```
-
-## Create a sell order
-
-Returns an `Order` object.
-
-```ruby
-Bitso.orders.sell(amount: 1.0, price: 111)
-```
-
-## Create a buy order
-
-Returns an `Order` object.
-
-```ruby
-Bitso.orders.buy(amount: 1.0, price: 111)
-```
-
-## Fetch your transactions
-
-Returns an `Array` of `UserTransaction`.
-
-```ruby
-Bitso.user_transactions.all
-```
-
-## Get your Bitcoin deposit address
-
-Returns a `String` with your BTC deposit address
-
-```ruby
-Bitso.bitcoin_deposit_address
-```
-
-## Withdraw Bitcoins
-
-Returns a `Boolean` indicating whether the withdrawal was successful or not
-
-```ruby
-Bitso.withdraw_bitcoins(amount: 1.23456789, address: "16Gcsethp9NdCt7oQaBaFS37hWX6nWafJL")
-```
-
-*To be continued!**
-
-# Tests
-
-If you'd like to run the tests you need to set the following environment variables:
-
-```
-export BITSO_KEY=xxx
-export BITSO_SECRET=yyy
-export BITSO_CLIENT_ID=zzz
-```
 
 ## Contributing
 
@@ -122,8 +63,3 @@ my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
-
-
-## Credits
-
-This is a fork of the [Bitstamp gem](https://github.com/kojnapp/bitstamp) built by [kojnapp](https://github.com/kojnapp).

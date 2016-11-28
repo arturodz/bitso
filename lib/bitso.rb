@@ -1,96 +1,69 @@
-require 'active_support'
-require 'active_support/core_ext'
-require 'active_support/inflector'
-require 'active_model'
-require 'rest-client'
-
-require 'bitso/net'
 require 'bitso/helper'
-require 'bitso/collection'
-require 'bitso/model'
-require 'bitso/balance'
-require 'bitso/orders'
-require 'bitso/transactions'
-require 'bitso/ticker'
 
-String.send(:include, ActiveSupport::Inflector)
+require 'typhoeus'
+require 'openssl'
+require 'base64'
+require 'bigdecimal'
 
-module Bitso
-  # API Key
-  mattr_accessor :key
+class Bitso
+  include Helper
 
-  # Bitso secret
-  mattr_accessor :secret
-
-  # Bitso client ID
-  mattr_accessor :client_id
-
-  # Currency
-  mattr_accessor :currency
-  @@currency = :mxn
-
-  def self.orders
-    self.sanity_check!
-
-    @@orders ||= Bitso::Orders.new
+  def initialize(client, key, secret, options={})
+    @client = client
+    @key = key
+    @secret = secret
+    @precise = options[:precise]
+    @base_url = 'https://api.bitso.com/v2/'
   end
 
-  def self.user_transactions
-    self.sanity_check!
+  def payload(options = {})
+    nonce = (Time.now.to_f*10000).to_i.to_s
+    signature = OpenSSL::HMAC.hexdigest(
+      OpenSSL::Digest.new('sha256'), @secret, (nonce + @client + @key))
 
-    @@transactions ||= Bitso::UserTransactions.new
-  end
+    payload = {
+      key: @key,
+      nonce: nonce,
+      signature: signature.upcase
+    }
 
-  def self.transactions
-    return Bitso::Transactions.from_api
-  end
-
-  def self.balance
-    self.sanity_check!
-    return Bitso::Balance.from_api
-  end
-
-  def self.withdraw_bitcoins(options = {})
-    self.sanity_check!
-    if options[:amount].nil? || options[:address].nil?
-      raise MissingConfigExeception.new("Required parameters not supplied, :amount, :address")
+    if options
+      options.each { |k,v| payload[k] = v.class == Float ? v.to_s : v.to_s("F") }
     end
-    response_body = Bitso::Net.post('/bitcoin_withdrawal',options)
-    if response_body != '"ok"'
-      $stderr.puts "Withdraw Bitcoins Error: " + response_body
-      return false
-    end
-    return true
+
+    payload
   end
 
-  def self.bitcoin_deposit_address
-    # returns the deposit address
-    self.sanity_check!
-    address = Bitso::Net.post('/bitcoin_deposit_address')
-    return address[1..address.length-2]
+  def request(method, action, options)
+    response = Typhoeus::Request.new(
+      "#{@base_url}#{action}",
+      method: method,
+      body: payload(options).to_json,
+      headers: { "Content-Type" => "application/json" }
+    ).run
+
+    structure_response(JSON.parse(response.body, quirks_mode: true), @precise)
   end
 
-  def self.ticker
-    return Bitso::Ticker.from_api
-  end
+  # Public Functions
 
-  def self.order_book
-    return JSON.parse Bitso::Net.get('/order_book').to_str
-  end
+  public_functions = ["ticker", "order_book", "transactions"]
 
-  def self.setup
-    yield self
-  end
-
-  def self.configured?
-    self.key && self.secret && self.client_id
-  end
-
-  def self.sanity_check!
-    unless configured?
-      raise MissingConfigExeception.new("Bitso Gem not properly configured")
+  public_functions.each do |action|
+    define_method(action) do |options={}|
+      request :get, action, options
     end
   end
 
-  class MissingConfigExeception<Exception;end;
+  # Private Functions
+
+  private_functions = ["balance", "user_transactions", "open_orders",
+    "lookup_order", "cancel_order", "buy", "sell", "bitcoin_deposit_address",
+    "bitcoin_withdrawal", "ripple_withdrawal"]
+
+  private_functions.each do |action|
+    define_method(action) do |options={}|
+      request :post, action, options
+    end
+  end
 end
